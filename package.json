@@ -1,0 +1,16 @@
+{
+  "name": "mailsender",
+  "version": "0.0.1",
+  "description": "Mail sender to hr recruiters for marketing roles",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "captain-horsepower",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "nodemailer": "^7.0.11"
+  }
+}
