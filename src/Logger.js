@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-class logger {
-    constructor(destination = "email.log") {
+class Logger {
+    constructor(destination = "log/email-tracking.log") {
         this.logPath = path.resolve(destination);
     }
 
@@ -19,4 +19,4 @@ class logger {
     }
 }
 
-module.exports = logger;
+module.exports = Logger;

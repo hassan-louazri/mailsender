@@ -2,9 +2,12 @@ const fs = require("fs");
 const path = require("path");
 
 /**
- * CSV reader to read csv files and parse them into json objects
+ * fileReader object to read csv files 
+ * and parse them into json objects line by line.
+ * 
+ * Can also read and parse txt files.
  */
-class csvReader {
+class FileReader {
     /**
      * Create CSV reader with basic configuration
      * @param {Object} options - Basic options only: delimiter, hasHeaders and encoding
@@ -43,7 +46,7 @@ class csvReader {
             .filter((contact) => contact.email != "")
             .map((contact) => ({
                 name: contact.contact.split(" ")[0],
-                company: contact.entreprise,
+                company: contact.company,
                 location: contact.location,
                 email: contact.email,
             }));
@@ -131,4 +134,4 @@ class csvReader {
 }
 
 // Export the class
-module.exports = csvReader;
+module.exports = FileReader;

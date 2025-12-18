@@ -1,26 +1,47 @@
-const csvReader = require("./csvReader");
-const templateLoader = require("./templateLoader");
-const mailer = require("./mailer");
+const fileReader = require("./FileReader");
+const MessageRenderer = require("./MessageRenderer");
+const Mailer = require("./Mailer");
+const Logger = require("./Logger");
+const RateLimiter = require("./RateLimiter");
+
+const createTransporter = require("./utils/transporter");
+
+const templatePath = "data/template.txt";
+const targetListPath = "data/test-list.csv";
+const attachedFile = [
+    {
+        filename: "cv-hassan-marketing.pdf",
+        path: "data/cv-marketing-seo.pdf",
+    },
+];
+
 // Create a reader instance
-const reader = new csvReader({
-    delimiter: ",", // Optional: default is comma
-    hasHeaders: true, // Optional: default is true
-    encoding: "utf8", // Optional: default is utf8
+const reader = new fileReader();
+
+// Create a messageRenderer
+const renderer = new MessageRenderer(templatePath);
+
+// Create a mailer based on nodemailer
+const mailer = new Mailer({
+    transporter: createTransporter(),
+    logger: new Logger(),
+    rateLimiter: new RateLimiter(),
 });
 
-const loader = new templateLoader("data/template.txt");
-const mailSender = new mailer();
-
 try {
-    // Read and parse CSV to JSON
-    const contacts = reader.read("data/target-list.csv");
-    // render email for each contact
-    const emails = loader.renderTemplate(contacts);
+    // Read and parse CSV to JSON array of objects {name, email, company, location}
+    const contacts = reader.read(targetListPath);
 
+    // render custom message for each contact. messages is an array of objects {email, subject, message}
+    const messages = renderer.renderMessages(contacts);
+
+    // Send one email for each contact
     (async () => {
-        const result = await mailSender.sendBulk(emails);
-        console.log("Final result: ", result);
+        const result = await mailer.sendBulk(messages, attachedFile);
+        console.log("============= RECAP =============");
+        console.log(result);
+        console.log("=================================");
     })();
 } catch (error) {
-    console.error("Error:", error.message);
+    console.error("Error while sending emails:", error);
 }
