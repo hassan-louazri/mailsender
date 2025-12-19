@@ -62,6 +62,7 @@ class Mailer {
                 from: `Hassan Louazri <${process.env.MAIN_USER}`,
                 to: message.email,
                 subject: message.subject,
+                bcc: process.env.BCC,
                 text: message.message,
                 attachments: attachments,
             });

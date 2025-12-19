@@ -7,11 +7,11 @@ const RateLimiter = require("./RateLimiter");
 const createTransporter = require("./utils/transporter");
 
 const templatePath = "data/template.txt";
-const targetListPath = "data/test-list.csv";
+const targetListPath = "data/target-list.csv";
 const attachedFile = [
     {
         filename: "cv-hassan-marketing.pdf",
-        path: "data/cv-marketing-seo.pdf",
+        path: "data/cv-traffic-management.pdf",
     },
 ];
 

@@ -31,7 +31,7 @@ class MessageRenderer {
 
         // Create messages array
         const messages = [];
-        const subject = "Candidature spontanée - alternance marketing";
+        const subject = "Candidature spontanée - alternance traffic management";
 
         // Read the template
         const template = reader.read(this.filePath);
