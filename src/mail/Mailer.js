@@ -23,17 +23,15 @@ class Mailer {
      * @param {string} deps.defaults.from - Default "from" address
      * @param {string} [deps.defaults.bcc] - Optional BCC
      */
-    constructor({ transporter, logger, rateLimiter, defaults = {} }) {
+    constructor({ transporter, logger, defaults = {} }) {
         if (!transporter)
             throw new Error("Mailer: transporter instance is required.");
         if (!logger) throw new Error("Mailer: Logger is required.");
-        if (!rateLimiter) throw new Error("Mailer: RateLimiter is required");
         if (!defaults.from)
             throw new Error("Mailer: defaults.from is required.");
 
         this.transporter = transporter;
         this.logger = logger;
-        this.rateLimiter = rateLimiter;
         this.defaults = defaults;
     }
 

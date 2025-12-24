@@ -5,9 +5,7 @@ async function runSendBulkJob({
     subject,
     attachments = [],
 }) {
-    const { fileReader, MessageRenderer, mailer, logger } = app;
-
-    // logger.info("Job 'Send Bulk Emails' started...");
+    const { fileReader, MessageRenderer, mailer, rateLimiter } = app;
 
     const contacts = fileReader.read(targetListPath);
     const template = fileReader.read(templatePath);
@@ -20,13 +18,8 @@ async function runSendBulkJob({
     for (const message of messages) {
         const result = await mailer.sendOne(message, attachments);
         results.push(result);
+        await rateLimiter.wait();
     }
-
-    // logger.info("Job 'Send Bulk Emails' finished.", {
-    //     total: results.length,
-    //     success: results.filter((r) => r.success).length,
-    //     failed: results.filter((r) => !r.success).length,
-    // });
 
     return results;
 }

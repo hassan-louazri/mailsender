@@ -19,7 +19,6 @@ function createApp(config = {}) {
     const mailer = new Mailer({
         transporter,
         logger,
-        rateLimiter,
         defaults: {
             from: config.from,
             bcc: config.bcc
@@ -31,7 +30,7 @@ function createApp(config = {}) {
     return {
         mailer,
         fileReader,
-        logger,
+        rateLimiter,
         MessageRenderer
     };
 }
