@@ -84,7 +84,7 @@ class Mailer {
             };
 
             // Persist result in logs
-            this.logger.log(result);
+            this.logger.info(result);
 
             return result;
         } catch (error) {
@@ -100,7 +100,7 @@ class Mailer {
             };
 
             // Persist error details
-            this.logger.log(result);
+            this.logger.error(result);
 
             return result;
         }

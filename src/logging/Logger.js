@@ -7,11 +7,14 @@ class Logger {
     }
 
     log(level, entry = {}) {
-        const line = JSON.stringify({
-            timestamp: new Date().toISOString(),
-            level: level,
-            ...entry,
-        });
+        const line = [
+            this._newDateFormatted(),
+            level || "INFO",
+            entry.success ? "QUEUD" : "FAILED",
+            entry.to || "Unkown recipient",
+            entry.messageId || "Unkown message ID",
+            entry.error || "No error."
+        ].join(" | ");
 
         fs.appendFileSync(this.logPath, line + "\n");
     }
@@ -26,6 +29,22 @@ class Logger {
 
     warn(entry) {
         this.log("WARN", entry);
+    }
+
+    _newDateFormatted() {
+        const date = new Date();
+        
+        const pad = (n) => n.toString().padStart(2, "0");
+
+        const day = pad(date.getDate());
+        const month = pad(date.getMonth() + 1);
+        const year = date.getFullYear();
+
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+        const seconds = pad(date.getSeconds());
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
     }
 }
 
