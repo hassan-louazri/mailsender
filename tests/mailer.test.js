@@ -1,52 +1,56 @@
-const Mailer = require("../src/Mailer");
+const Mailer = require("../src/mail/Mailer");
 const createEtherealTransporter = require("./helpers/etherealTransporter");
 
-describe("Mailer logic", () => {
-    test("Mailer.sendOne() should send a single email successfully", async () => {
-        const { transporter } = await createEtherealTransporter();
+describe("Mailer", () => {
+    let transporter;
+    let logger;
+    let defaults;
+    let mailer;
 
-        // Mock dependencies
-        const logger = { log: jest.fn() };
-        const rateLimiter = { wait: jest.fn() };
+    beforeEach(async () => {
+        const ethereal = await createEtherealTransporter() 
+        transporter = ethereal["transporter"];
+        logger = { log: jest.fn(), info: jest.fn(), error: jest.fn() };
 
-        const mailer = new Mailer({ transporter, logger, rateLimiter });
+        defaults = {
+            from: "Tester <test@ethereal.email>",
+        };
+        
+        mailer = new Mailer({ transporter, logger, defaults });
+
+    });
+
+    test("sendOne - success", async () => {
 
         const result = await mailer.sendOne({
-            email: "test@ethereal.email",
-            subject: "Hello",
-            message: "This is a test message for sendOne function",
+            email: "test-receiver@ethereal.email",
+            subject: "Hello test",
+            message:
+                "This is a test message for sendOne function automated test.",
         });
 
         expect(result.success).toBe(true);
         expect(result.messageId).toBeDefined();
-        expect(logger.log).toHaveBeenCalled();
+        expect(logger.info).toHaveBeenCalled();
     });
 
-    test("Mailer.sendBulk() should handle multiple emails and respect rate limiting", async () => {
-        // Fake transporter
-        const transporter = {
-            sendMail: jest
-                .fn()
-                .mockResolvedValueOnce({ messageId: "1" })
-                .mockRejectedValueOnce(new Error("SMTP error"))
-                .mockResolvedValueOnce({ messageId: "3" }),
-        };
+    test("sendOne - handles failure gracefully", async () => {
+        // Temporarily inject a failing transporter
+        const failingMailer = new Mailer({
+            transporter: {
+                sendMail: () => Promise.reject(new Error("Failure")),
+            },
+            logger,
+            defaults: { from: "fail@test.com" },
+        });
 
-        const logger = { log: jest.fn() };
-        const rateLimiter = { wait: jest.fn() };
+        const result = await failingMailer.sendOne({
+            email: "fail@test.com",
+            subject: "Fail",
+            message: "Body",
+        });
 
-        const mailer = new Mailer({ transporter, logger, rateLimiter });
-
-        const results = await mailer.sendBulk([
-            { email: "a@test.com" },
-            { email: "b@test.com" },
-            { email: "c@test.com" },
-        ]);
-
-        expect(results).toHaveLength(3);
-        expect(results[0].success).toBe(true);
-        expect(results[1].success).toBe(false);
-        expect(results[2].success).toBe(true);
-        expect(rateLimiter.wait).toHaveBeenCalledTimes(2);
+        expect(result.success).toBe(false);
+        expect(result.error).toBe("Failure");
     });
 });

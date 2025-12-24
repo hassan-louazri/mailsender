@@ -1,4 +1,3 @@
-const nodemailer = require("nodemailer");
 const createEtherealTransporter = require("./helpers/etherealTransporter");
 
 describe("SMTP Transporter (Ethereal)", () => {
@@ -13,8 +12,5 @@ describe("SMTP Transporter (Ethereal)", () => {
         });
 
         expect(info.messageId).toBeDefined();
-
-        const previewUrl = nodemailer.getTestMessageUrl(info);
-        console.log("Preview URL:", previewUrl);
     });
 });
