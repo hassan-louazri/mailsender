@@ -2,14 +2,14 @@ require("dotenv").config();
 const nodemailer = require('nodemailer');
 
 
-function createTransporter() {
+function createTransporter({host, port, user, pass}) {
     return nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
+            host: host,
+            port: port,
             secure: false,
             auth: {
-                user: process.env.MAIN_USER,
-                pass: process.env.MAIN_PASS,
+                user: user,
+                pass: pass,
             },
         });
 }
