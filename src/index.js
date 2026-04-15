@@ -5,13 +5,13 @@ const runSendBulkJob = require("./jobs/sendBulk.job");
 
 const templatePath = "data/template.txt";
 const targetListPath = "data/test-list.csv";
-const subject = "Subject line";
+const subject = "Suivi - Candidature spontanée";
 const logFilePath = "log/email-tracking.log";
 const from = `Hassan Louazri <${process.env.MAIN_USER}>`
 const attachedFile = [
     {
         filename: "cv-hassan-marketing.pdf",
-        path: "data/cv-marketing-seo.pdf",
+        path: "data/cv-traffic-management.pdf",
     },
 ];
 

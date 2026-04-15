@@ -14,10 +14,12 @@ async function runSendBulkJob({
     const messages = renderer.render(subject, contacts);
 
     const results = [];
-
+    let i = 0;
+    const total = messages.length;
     for (const message of messages) {
         const result = await mailer.sendOne(message, attachments);
         results.push(result);
+        console.log(`[${++i}/${total}] Sending message to ${message.email}...`);
         await rateLimiter.wait();
     }
 
