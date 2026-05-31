@@ -3,9 +3,9 @@ class RateLimiter {
         this.delay = delay;
     }
 
-    async wait() {
+    async wait(delay) {
         return new Promise((resolve) => {
-            setTimeout(resolve, this.delay);
+            setTimeout(resolve, delay || this.delay);
         });
     }
 }

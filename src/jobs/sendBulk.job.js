@@ -20,7 +20,8 @@ async function runSendBulkJob({
         const result = await mailer.sendOne(message, attachments);
         results.push(result);
         console.log(`[${++i}/${total}] Sending message to ${message.email}...`);
-        await rateLimiter.wait();
+        await rateLimiter.wait(10000);
+        if (i % 10 === 0) await rateLimiter.wait(990000);
     }
 
     return results;

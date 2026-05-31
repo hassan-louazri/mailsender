@@ -3,9 +3,9 @@ require("dotenv").config();
 const createApp = require("./app/createApp");
 const runSendBulkJob = require("./jobs/sendBulk.job");
 
-const templatePath = "data/template.txt";
+const templatePath = "data/followup-template-1.txt";
 const targetListPath = "data/test-list.csv";
-const subject = "Suivi - Candidature spontanée";
+const subject = "Suivi: Candidature spontanée";
 const logFilePath = "log/email-tracking.log";
 const from = `Hassan Louazri <${process.env.MAIN_USER}>`
 const attachedFile = [
